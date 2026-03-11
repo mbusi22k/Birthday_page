@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy 20th Birthday My Love</title>
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  text-align:center;
+  color:white;
+  background-image:url("background.jpeg");
+  background-size:cover;
+  background-position:center;
+  overflow-x:hidden;
+  overflow-y:auto; /* allow scrolling */
+}
+
+section{
+  padding:60px 20px;
+  background:rgba(0,0,0,0.6);
+  margin:20px;
+  border-radius:15px;
+}
+
+h1{
+  font-size:50px;
+  color:#ffb6c1;
+  text-shadow:0 0 15px pink;
+}
+
+button{
+  padding:15px 30px;
+  font-size:18px;
+  border:none;
+  border-radius:10px;
+  background:#ff4d6d;
+  color:white;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  background:#ff1e4d;
+}
+
+/* Slideshow */
+.slideshow{
+  max-width:600px;
+  margin:auto;
+  border-radius:15px;
+  overflow:hidden;
+  position:relative;
+}
+
+.slide{
+  width:100%;
+  height:auto;
+  border-radius:15px;
+  display:none; /* only active slide is shown */
+}
+
+.slide.active{
+  display:block;
+}
+
+/* Floating hearts */
+.heart{
+  position:fixed;
+  bottom:-50px;
+  font-size:25px;
+  animation:float 8s infinite;
+}
+
+@keyframes float{
+  0%{transform:translateY(0) rotate(0deg);opacity:1;}
+  100%{transform:translateY(-900px) rotate(360deg);opacity:0;}
+}
+
+/* Rose petals */
+.rose{
+  position:fixed;
+  top:-50px;
+  font-size:20px;
+  animation:fall 7s linear infinite;
+}
+@keyframes fall{
+  0%{transform:translateY(0) rotate(0deg);opacity:1;}
+  100%{transform:translateY(100vh) rotate(360deg);opacity:0;}
+}
+
+/* Fireworks canvas */
+#fireworks{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:10;
+}
+
+/* Play Music Button */
+#playMusic{
+  position:fixed;
+  top:10px;
+  right:10px;
+  padding:10px 20px;
+  background:#ff4d6d;
+  color:white;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  z-index:20;
+}
+#playMusic:hover{
+  background:#ff1e4d;
+}
+</style>
+</head>
+<body>
+
+<!-- Play Music -->
+<button id="playMusic">▶ Play Music</button>
+<audio id="bgMusic" loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Hero Section -->
+<section>
+<h1>Happy 20th Birthday MaNyambane❤️</h1>
+<p>To the most amazing girl in my life. Today we celebrate you and the beautiful person you are.</p>
+</section>
+
+<!-- Countdown -->
+<section>
+<h2>Countdown to Your Special Day 🎂</h2>
+<h1 id="countdown"></h1>
+</section>
+
+<!-- Slideshow -->
+<section>
+<h2>Our Memories 📸</h2>
+<div class="slideshow">
+  <img src="Image1.jpeg" class="slide active">
+  <img src="Image2.jpeg" class="slide">
+  <img src="Image3.jpeg" class="slide">
+  <img src="Image4.jpeg" class="slide">
+  <img src="Image5.jpeg" class="slide">
+  <img src="Image6.jpeg" class="slide">
+  <img src="Image7.jpeg" class="slide">
+  <img src="Image8.jpeg" class="slide">
+  <img src="Image9.jpeg" class="slide">
+  <img src="Image10.jpeg" class="slide">
+</div>
+</section>
+
+<!-- Surprise Message -->
+<section>
+<h2>A Special Message For You 🌹</h2>
+<button onclick="showMessage()">Click For A Surprise</button>
+<p id="message"></p>
+</section>
+
+<!-- Floating Hearts -->
+<div class="heart" style="left:10%">❤️</div>
+<div class="heart" style="left:30%">❤️</div>
+<div class="heart" style="left:50%">❤️</div>
+<div class="heart" style="left:70%">❤️</div>
+<div class="heart" style="left:90%">❤️</div>
+
+<!-- Rose Petals -->
+<div class="rose" style="left:5%">🌹</div>
+<div class="rose" style="left:20%">🌹</div>
+<div class="rose" style="left:35%">🌹</div>
+<div class="rose" style="left:50%">🌹</div>
+<div class="rose" style="left:65%">🌹</div>
+<div class="rose" style="left:80%">🌹</div>
+<div class="rose" style="left:95%">🌹</div>
+
+<!-- Fireworks -->
+<canvas id="fireworks"></canvas>
+
+<script>
+/* Countdown */
+var birthday = new Date("March 13, 2026 00:00:00").getTime();
+var countdownInterval = setInterval(function(){
+  var now = new Date().getTime();
+  var distance = birthday - now;
+  var days = Math.floor(distance/(1000*60*60*24));
+  var hours = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+  var minutes = Math.floor((distance%(1000*60*60))/(1000*60));
+  var seconds = Math.floor((distance%(1000*60))/1000);
+  document.getElementById("countdown").innerHTML =
+    days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+  if(distance <= 0){
+    clearInterval(countdownInterval);
+    document.getElementById("countdown").innerHTML = "🎉 Happy Birthday! 🎉";
+    launchFireworks();
+  }
+},1000);
+
+/* Slideshow */
+var slideIndex = 0;
+var slides = document.getElementsByClassName("slide");
+function showSlides(){
+  for(var i=0;i<slides.length;i++){slides[i].classList.remove("active");}
+  slideIndex++;
+  if(slideIndex>slides.length){slideIndex=1;}
+  slides[slideIndex-1].classList.add("active");
+  setTimeout(showSlides,3000);
+}
+showSlides();
+
+/* Surprise Message */
+function showMessage(){
+  document.getElementById("message").innerHTML =
+    "🌹 You are the most beautiful part of my life. Watching you turn 20 reminds me how lucky I am to have you. I hope this year brings you everything your heart desires. I love you more than words can explain. ❤️";
+}
+
+/* Play Music */
+document.getElementById("playMusic").addEventListener("click", function(){
+  var audio = document.getElementById("bgMusic");
+  audio.play();
+  this.style.display = "none";
+});
+
+/* Fireworks */
+function launchFireworks(){
+  var canvas = document.getElementById("fireworks");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  var ctx = canvas.getContext("2d");
+  var particles = [];
+  function createParticle(x,y){
+    particles.push({
+      x:x,
+      y:y,
+      radius:Math.random()*3+2,
+      color:'hsl('+Math.random()*360+',100%,50%)',
+      dx:(Math.random()-0.5)*5,
+      dy:(Math.random()-0.5)*5,
+      life:50
+    });
+  }
+  function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(var i=0;i<particles.length;i++){
+      var p = particles[i];
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.radius,0,2*Math.PI);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+      p.x += p.dx;
+      p.y += p.dy;
+      p.life--;
+      if(p.life<=0){particles.splice(i,1);i--;}
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+  for(var i=0;i<50;i++){
+    setTimeout(function(){
+      createParticle(Math.random()*canvas.width,Math.random()*canvas.height/2);
+    },i*100);
+  }
+}
+</script>
+
+</body>
+</html>
